@@ -1,0 +1,7 @@
+{
+    "env": {
+        "MONGO_USER": "eslam",
+        "MONGO_PASSWORD": "zXL0RmrtxAAMgCls",
+        "MONGO_DEFAULT_DATABASE": "stadium-reservation"
+    }
+}
