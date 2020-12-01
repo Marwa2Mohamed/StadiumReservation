@@ -17,20 +17,15 @@ const users = new Schema({
     },
     password: {
         type: String,
-        requiredPaths: true
+        requiredPaths: true,
+        
     },
-    location: {
-        type: {
-            type: String,
-            enum: ['Point'],
-        },
-        coordinates: {
-            type: [Number],
-        }
-    },
-    auth: {
-        type: Boolean,
+    type_of_user:{
+        type:Number,//1 => player ,  2 => owner
     }
+
+}, {
+    discriminatorKey: 'user_type', 
 });
 
-module.exports = mongoose.model("users", users);
+module.exports = mongoose.model("Users", users);

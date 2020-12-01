@@ -8,8 +8,11 @@ const compression = require("compression")
 
 
 // define routes
-const userRoutes = require('./Routes/user/user')
 const authRoutes = require('./Routes/auth/auth')
+const userRoutes = require('./Routes/user/user')
+const playerRoutes = require('./Routes/user/player')
+const ownerRoutes = require('./Routes/user/owner')
+const playgrundRoutes = require('./Routes/playground/playground')
 
 
 // user modules
@@ -29,8 +32,12 @@ app.use((req, res, next) => {
 
 
 //use main routes
-app.use('/user', userRoutes);
 app.use('/auth', authRoutes);
+app.use('/user', userRoutes);
+app.use('/player', playerRoutes);
+app.use('/owner', ownerRoutes);
+app.use('/playground', playgrundRoutes);
+
 
 
 //handle error
