@@ -36,22 +36,12 @@ exports.signUp = (req, res, next) => {
                             actions: true
 
                         });
-                    } else {
-                        user = new Owner({
-                            _id: new mongoose.Types.ObjectId(),
-                            first_name: req.body.first_name,
-                            second_name: req.body.second_name,
-                            phone_number: req.body.phone_number,
-                            password: hash,
-                            auth: false
 
-                        });
-                    }
-                    user
-                        .save()
+                        user.save()
                         .then(() => {
                             res.status(201).json({
                                 message: 'user created successfully !',
+
                             });
                         })
                         .catch(err => {
@@ -60,6 +50,33 @@ exports.signUp = (req, res, next) => {
                                 error: err,
                             });
                         });
+                    } else {
+                        user = new Owner({
+                            _id: new mongoose.Types.ObjectId(),
+                            first_name: req.body.first_name,
+                            second_name: req.body.second_name,
+                            phone_number: req.body.phone_number,
+                            password: hash,
+                            auth: false,
+
+                        });
+                        
+                        user.save()
+                        .populate('playgrounds')
+                        .then(() => {
+                            res.status(201).json({
+                                message: 'user created successfully !',
+
+                            });
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            res.status(500).json({
+                                error: err,
+                            });
+                        });
+                    }
+                    
                 }
             });
         }
@@ -84,7 +101,7 @@ exports.login = (req, res, next) => {
                     res.status(200).json({
                         message: 'Auth seccessful',
                         user:user,
-                        token: token
+                        token: token,
                     });
 
                 } else {

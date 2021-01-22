@@ -33,7 +33,7 @@ const playgrounds = new Schema({
     //       required: true
     //     }
     //   },
-    images:[]
+    image: { type: String, required: true }
 
 });
 

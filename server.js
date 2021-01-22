@@ -1,12 +1,13 @@
-const path = require("path")
+const path = require("path");
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const compression = require("compression")
+const compression = require("compression");
 
 
+    
 // define routes
 const authRoutes = require('./Routes/auth/auth')
 const userRoutes = require('./Routes/user/user')
@@ -19,10 +20,11 @@ const playgrundRoutes = require('./Routes/playground/playground')
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'Public')));
+app.use('/products_images',express.static('products_images')); // parses the /products_images to read image files
 app.use(compression());
 
 
-//CROS
+//CROS origin
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*')
     res.setHeader('Access-Control-Allow-Methods', 'GET , POST , PUT , PATCH , DELETE');
@@ -58,7 +60,10 @@ app.use((error, req, res, next) => {
 
 
 //mongodb connection
-mongoose.connect('mongodb+srv://eslam:zXL0RmrtxAAMgCls@cluster0.twzmg.mongodb.net/stadium-reservation?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, })
+mongoose.connect('mongodb+srv://marwa:S6kGUWjCjWmbhKRJ@cluster0.twzmg.mongodb.net/stadium-reservation?retryWrites=true&w=majority',
+{ useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true })
     .then(() => {
         app.listen(PORT, () => {
             console.log(`Server started on port`);
