@@ -62,7 +62,6 @@ exports.signUp = (req, res, next) => {
                         });
                         
                         user.save()
-                        .populate('playgrounds')
                         .then(() => {
                             res.status(201).json({
                                 message: 'user created successfully !',

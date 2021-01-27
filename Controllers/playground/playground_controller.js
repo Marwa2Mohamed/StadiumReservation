@@ -4,7 +4,9 @@ const mongoose = require('mongoose');
 const Playground = require('../../Models/playground/playground_model');
 const Owner = require('../../Models/users/owners_model');
 
+
 exports.getAllPlaygrounds = (req, res, next) => {
+    // for admins
     Playground.find()
         // .populate("owner_Id")
         .exec()
