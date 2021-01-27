@@ -60,3 +60,16 @@ exports.addOwnerPlayground = (req, res, next) => {
     }
 
 }
+exports.getOwnerPlaygrounds = (req, res, next) => {
+    Playground.find({ owner_Id: req.params.owner_Id })
+        .exec()
+        .then(playgrounds => {
+            res.status(200).json(playgrounds);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err,
+            });
+        });
+};

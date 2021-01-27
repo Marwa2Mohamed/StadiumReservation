@@ -16,6 +16,21 @@ exports.getAllUsers = (req, res, next) => {
         });
 };
 
+exports.getSpecificUser = (req, res, next) => {
+    User.findOne({_id:req.params.userId})
+    .exec()
+    .then(user => {
+        console.log(user);
+        res.status(200).json(user);
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err,
+        });
+    });
+}
+
 exports.deleteUser = (req, res, next) => {
     User.deleteOne({ _id: req.params.userId })
         .exec()
