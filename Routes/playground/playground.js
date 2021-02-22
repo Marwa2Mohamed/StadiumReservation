@@ -5,7 +5,8 @@ const playgroundController = require('../../Controllers/playground/playground_co
 const checkAuth = require('../../check_auth/check_auth');
 
 router.post("/addPlayground", checkAuth, upload.array('images[]'), playgroundController.addOwnerPlayground);
-router.get("/getOwnerPlaygrounds/:owner_Id", checkAuth, playgroundController.getOwnerPlaygrounds);
+router.get("/getOwnerPlaygrounds", checkAuth, playgroundController.getOwnerPlaygrounds); //":owner_Id" is removed
+router.delete("/deleteOwnerPlaygrounds", checkAuth, playgroundController.deleteOwnerPlayground);
 router.get("/getAllPlaygrounds", playgroundController.getAllPlaygrounds);
 
 
