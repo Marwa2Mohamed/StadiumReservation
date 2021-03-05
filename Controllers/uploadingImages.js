@@ -7,6 +7,7 @@ var images = [
 
 ];
 
+const { Timestamp } = require('mongodb');
 // images parsing
 const multer = require('multer'),
     fileSystem = require('fs');
@@ -22,7 +23,7 @@ let storage = multer.diskStorage({
             cb(null, dir); // null: for error checking type 
         },
         filename: function (req, file, cb) {
-            cb(null, Date.now() +'_'+ file.originalname);
+            cb(null, new Timestamp() +'_'+ file.originalname); 
         }
     }), 
 
