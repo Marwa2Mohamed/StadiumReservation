@@ -32,6 +32,10 @@ exports.addOwnerPlayground = (req, res, next) => {
         playground_name: req.body.playground_name,
         owner_Id: ownerId,
         description: req.body.description,
+        // start, end , week, priceperhourAM:0.0, priceperhourPM:0.0, location,
+        address: req.body.address,
+        available: req.body.available, 
+        capacity: req.body.capacity
     });
 
     if (req.files) {
@@ -116,7 +120,7 @@ exports.deleteOwnerPlayground = (req, res, next) => {
 
     Playground.findByIdAndDelete({
         owner_Id: req.body.owner_Id,
-        _id: req.body.playground_Id // delete by playground name or image(S) ??
+        _id: req.body.playground_Id
     }) //"owner_Id: req.params.owner_Id" changed to owner_Id: req.body.owner_Id
         .exec()
         .then(playgrounds => {
