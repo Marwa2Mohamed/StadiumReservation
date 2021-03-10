@@ -1,4 +1,3 @@
-
 const mongoose = require('mongoose');
 
 const Playground = require('../../Models/playground/playground_model');
@@ -24,6 +23,32 @@ exports.getAllPlaygrounds = (req, res, next) => {
             });
         });
 }
+exports.getNearPlaygrounds = (req, res, next) => {
+    Playground.find({
+            location: {
+                $near: {
+                    $geometry: {
+                        type: "Point",
+                        coordinates: [30.005632781395438, 31.188882783235936]
+                    },
+                    $maxDistance: 10000, // 10 kilo
+                    $minDistance: 0
+                }
+                // $maxDistance: 100,
+                // $minDistance: 10
+            }
+        })
+        .exec()
+        .then(playgrounds => {
+            res.status(200).json(playgrounds);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err,
+            });
+        });
+}
 
 exports.addOwnerPlayground = (req, res, next) => {
     const ownerId = req.body.owner_Id;
@@ -32,10 +57,14 @@ exports.addOwnerPlayground = (req, res, next) => {
         playground_name: req.body.playground_name,
         owner_Id: ownerId,
         description: req.body.description,
+        location: {
+            type: 'Point',
+            coordinates: req.body.coordinates
+        },
         // start, end , week, priceperhourAM:0.0, priceperhourPM:0.0, location,
         address: req.body.address,
-        available: req.body.available, 
-        capacity: req.body.capacity
+        //available: req.body.available, 
+        //capacity: req.body.capacity
     });
 
     if (req.files) {
@@ -49,19 +78,19 @@ exports.addOwnerPlayground = (req, res, next) => {
     }
 
     newPlayground
-    .save()
-    .then(() => {
-        res.status(201).json({
-            message: 'newPlayground created successfully !',
-        });
+        .save()
+        .then(() => {
+            res.status(201).json({
+                message: 'newPlayground created successfully !',
+            });
 
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).json({
-            error: err,
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err,
+            });
         });
-    });
 
     if (ownerId.match(/^[0-9a-fA-F]{24}$/)) {
         Owner.findById(ownerId)
@@ -85,7 +114,9 @@ exports.addOwnerPlayground = (req, res, next) => {
 
 }
 exports.getOwnerPlaygrounds = (req, res, next) => {
-    Playground.find({ owner_Id: req.body.owner_Id }) //"owner_Id: req.params.owner_Id" changed to owner_Id: req.body.owner_Id
+    Playground.find({
+            owner_Id: req.body.owner_Id
+        }) //"owner_Id: req.params.owner_Id" changed to owner_Id: req.body.owner_Id
         .exec()
         .then(playgrounds => {
             res.status(200).json(playgrounds);
@@ -96,7 +127,8 @@ exports.getOwnerPlaygrounds = (req, res, next) => {
                 error: err,
             });
         });
-};/**output:[
+};
+/**output:[
     {
         "_id": "6020da73d3634023c44447e4",
         "playground_name": "\"playground 1\"",
@@ -119,9 +151,9 @@ exports.deleteOwnerPlayground = (req, res, next) => {
     const imagesdir = '././products_images/';
 
     Playground.findByIdAndDelete({
-        owner_Id: req.body.owner_Id,
-        _id: req.body.playground_Id
-    }) //"owner_Id: req.params.owner_Id" changed to owner_Id: req.body.owner_Id
+            owner_Id: req.body.owner_Id,
+            _id: req.body.playground_Id
+        }) //"owner_Id: req.params.owner_Id" changed to owner_Id: req.body.owner_Id
         .exec()
         .then(playgrounds => {
             if (playgrounds !== null) {
@@ -133,17 +165,17 @@ exports.deleteOwnerPlayground = (req, res, next) => {
                         files.forEach(function (file, index) { // iterate over these files
 
                             for (let index = 1; index < PlaygroundsSeperated.length; index++) { // index=1 because index=0 contains the folder name and is not needed
-                                
+
                                 if (file === PlaygroundsSeperated[index]) {
-                                    fs.unlink(path.join(imagesdir, file), (err) =>{
-                                                if(err){
-                                                    console.log(err);
-                                                } else {
-                                                    console.log(file + " is successfully deleted.")
-                                                }
-                                            }) // delete the file from the folder
+                                    fs.unlink(path.join(imagesdir, file), (err) => {
+                                        if (err) {
+                                            console.log(err);
+                                        } else {
+                                            console.log(file + " is successfully deleted.")
+                                        }
+                                    }) // delete the file from the folder
                                 }
-                                
+
                             }
                         })
                     })

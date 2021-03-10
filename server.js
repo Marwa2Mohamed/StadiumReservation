@@ -66,6 +66,7 @@ mongoose.connect('mongodb+srv://marwa:S6kGUWjCjWmbhKRJ@cluster0.twzmg.mongodb.ne
   useCreateIndex: true })
     .then(() => {
         app.listen(PORT, () => {
+        
             console.log(`Server started on port`);
         });
     }).catch(err => {
