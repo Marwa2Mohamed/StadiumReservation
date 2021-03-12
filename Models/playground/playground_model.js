@@ -1,45 +1,48 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const workingDays = new Schema({
-    dayName: {
-        type: String,
-        required: true
-    },
+const workingDays = new Schema(
+    {
+        _id: mongoose.Schema.Types.ObjectId,
+        dayName: {
+            type: String,
+            required: true
+        },
 
-    start_time: {
-        type: Date,
-        required: true
-    },
-    end_time: {
-        type: Date,
-        required: true
-    },
-    hourPriceAM: {
-        type: Number,
-        required: true
-    },
-    hourPricePM: {
-        type: Number,
-        required: true
-    }
-});
+        start_time: {
+            type: Date, // just the HH:mm part
+            required: true
+        },
+        end_time: {
+            type: Date, // just the HH:mm part
+            required: true
+        },
+        hourPriceAM: {
+            type: Number,
+            default: 0
+        },
+        hourPricePM: {
+            type: Number,
+            default: 0
+        }
+
+    });
 const playgrounds = new Schema({
     _id: mongoose.Schema.Types.ObjectId,
     playground_name: {
         type: String,
         required: true
     },
-    owner_Id:{
-        type:Schema.Types.ObjectId,
-        ref : 'Owner'
+    owner_Id: {
+        type: Schema.Types.ObjectId,
+        ref: 'Owner'
     },
     description: {
         type: String,
-       
+
     },
-    weekDays:{
-        type:[workingDays],
-        required:true
+    weekDays: {
+        type: [workingDays],
+        required: true
     },
     // location: {
     //     type: {
@@ -52,17 +55,17 @@ const playgrounds = new Schema({
     //       required: true
     //     }
     //   },
-    address:{
-      type: String,
-      required: true
+    address: {
+        type: String,
+        required: true
     },
     capacity: {
         type: String,
         required: true
     },
 
-    image: { 
-        type: String, 
+    image: {
+        type: String,
         required: true 
     },
 
