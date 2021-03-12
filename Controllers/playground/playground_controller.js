@@ -108,11 +108,7 @@ exports.deleteOwnerPlayground = (req, res, next) => {
     Playground.findByIdAndDelete({
         owner_Id: req.body.owner_Id,
         _id: req.body.playground_Id
-<<<<<<< HEAD
-    }) //"owner_Id: req.params.owner_Id" changed to owner_Id: req.body.owner_Id
-=======
     }) //"owner_Id: req.params.owner_Id" chgitanged to owner_Id: req.body.owner_Id
->>>>>>> a450b01 (weekDays json request is parsed and added to the owner's feature + address, capacity, available, times and prices)
         .exec()
         .then(playgrounds => {
             if (playgrounds !== null) {
