@@ -4,9 +4,11 @@ const mongoose = require('mongoose');
 const Playground = require('../../Models/playground/playground_model');
 const Owner = require('../../Models/users/owners_model');
 
-
 const fs = require("fs");
 const path = require("path");
+const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants');
+var moment = require('moment');
+moment().format();
 
 exports.getAllPlaygrounds = (req, res, next) => {
     // for admins
@@ -23,46 +25,43 @@ exports.getAllPlaygrounds = (req, res, next) => {
                 error: err,
             });
         });
-}
+};
 
 exports.addOwnerPlayground = (req, res, next) => {
-    const ownerId = req.body.owner_Id;
+    const ownerId = req.body.owner_Id,
+        playgroudID = new mongoose.Types.ObjectId();
+
+    // creating the model object and adding simple format requests to fields 
     const newPlayground = new Playground({
-        _id: new mongoose.Types.ObjectId(),
+        _id: playgroudID,
         playground_name: req.body.playground_name,
         owner_Id: ownerId,
         description: req.body.description,
-        // start, end , week, priceperhourAM:0.0, priceperhourPM:0.0, location,
         address: req.body.address,
-        available: req.body.available, 
-        capacity: req.body.capacity
+        capacity: req.body.capacity,
+        avaiable: req.body.avaiable
     });
+    //insert the weekdays to the weekdays Array field of working day schema model
+        extractWeekDays(req, newPlayground);
+    //analyzing Images, add them to one string of path and sperate them by ,  
+    
 
-    if (req.files) {
-        let path = '';
-        req.files.forEach((file, index, arr) => {
-            path += file.path + ',';
-        });
-
-        path = path.substring(0, path.lastIndexOf(','));
-        newPlayground.image = path;
-    }
-
+    // finished and saving it to db's playground collection
     newPlayground
-    .save()
-    .then(() => {
-        res.status(201).json({
-            message: 'newPlayground created successfully !',
-        });
+        .save()
+        .then(() => {
+            res.status(201).json({
+                message: 'newPlayground created successfully !',
+            });
 
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).json({
-            error: err,
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err,
+            });
         });
-    });
-
+    // Add the new playground to db's owners collection
     if (ownerId.match(/^[0-9a-fA-F]{24}$/)) {
         Owner.findById(ownerId)
             .then(owner => {
@@ -83,7 +82,7 @@ exports.addOwnerPlayground = (req, res, next) => {
         });
     }
 
-}
+};
 exports.getOwnerPlaygrounds = (req, res, next) => {
     Playground.find({ owner_Id: req.body.owner_Id }) //"owner_Id: req.params.owner_Id" changed to owner_Id: req.body.owner_Id
         .exec()
@@ -96,32 +95,24 @@ exports.getOwnerPlaygrounds = (req, res, next) => {
                 error: err,
             });
         });
-};/**output:[
-    {
-        "_id": "6020da73d3634023c44447e4",
-        "playground_name": "\"playground 1\"",
-        "owner_Id": "6020d77e03e9740070909705",
-        "description": "\"playground one\"",
-        "image": "products_images\\1612765811629_playground1.jpg,products_images\\1612765811640_playground2.jpg,products_images\\1612765811643_playground3.jpg",
-        "__v": 0
-    },
-    {
-        "_id": "6023519bde872350c4c18bf6",
-        "playground_name": "\"playground 2\"", // do we have to check if the playground name found before??
-        "owner_Id": "6020d77e03e9740070909705",
-        "description": "\"playground two\"",
-        "image": "products_images\\1612927387781_playground2.2.png,products_images\\1612927387786_playround2-1.jpeg",
-        "__v": 0
-    }
-] */
+};
 
 exports.deleteOwnerPlayground = (req, res, next) => {
     const imagesdir = '././products_images/';
+    Owner.findByIdAndUpdate({
+        _id: req.body.owner_Id,
+        playgrounds: req.body.playground_Id
+    }, { $set: { playgrounds: null } })
+        .exec()
 
     Playground.findByIdAndDelete({
         owner_Id: req.body.owner_Id,
         _id: req.body.playground_Id
+<<<<<<< HEAD
     }) //"owner_Id: req.params.owner_Id" changed to owner_Id: req.body.owner_Id
+=======
+    }) //"owner_Id: req.params.owner_Id" chgitanged to owner_Id: req.body.owner_Id
+>>>>>>> a450b01 (weekDays json request is parsed and added to the owner's feature + address, capacity, available, times and prices)
         .exec()
         .then(playgrounds => {
             if (playgrounds !== null) {
@@ -133,17 +124,17 @@ exports.deleteOwnerPlayground = (req, res, next) => {
                         files.forEach(function (file, index) { // iterate over these files
 
                             for (let index = 1; index < PlaygroundsSeperated.length; index++) { // index=1 because index=0 contains the folder name and is not needed
-                                
+
                                 if (file === PlaygroundsSeperated[index]) {
-                                    fs.unlink(path.join(imagesdir, file), (err) =>{
-                                                if(err){
-                                                    console.log(err);
-                                                } else {
-                                                    console.log(file + " is successfully deleted.")
-                                                }
-                                            }) // delete the file from the folder
+                                    fs.unlink(path.join(imagesdir, file), (err) => {
+                                        if (err) {
+                                            console.log(err);
+                                        } else {
+                                            console.log(file + " is successfully deleted.")
+                                        }
+                                    }) // delete the file from the folder
                                 }
-                                
+
                             }
                         })
                     })
@@ -168,3 +159,40 @@ exports.deleteOwnerPlayground = (req, res, next) => {
             });
         });
 };
+
+function extractImages(req, newPlayground) {
+    if (req.files) {
+        let path = '';
+        req.files.forEach((file, index, arr) => {
+            path += file.path + ',';
+        });
+
+        path = path.substring(0, path.lastIndexOf(','));
+        newPlayground.image = path;
+    }
+}
+
+function extractWeekDays(req, newPlayground) {
+        let weekDaysObject = JSON.parse(req.body.weekDays);
+        console.log(weekDaysObject);
+        console.log(typeof(weekDaysObject));
+        weekDaysObject.forEach(element => {
+            let startTime = moment(element.start_time, 'hh:mm'),
+                endTime = moment(element.end_time, 'hh:mm');
+            console.log(startTime);
+            console.log(endTime);
+            let aDay = {
+                _id: new mongoose.Types.ObjectId(),
+                dayName: element.dayName,
+                start_time: new Date(startTime),
+                end_time: new Date(endTime),
+                hourPriceAM: parseFloat(element.hourPriceAM),
+                hourPricePM: parseFloat(element.hourPricePM)
+            }
+            console.log(aDay.start_time.getHours());
+            console.log(aDay.end_time.getHours());
+            newPlayground.weekDays.push(aDay);
+        });
+        extractImages(req, newPlayground);
+       
+}
