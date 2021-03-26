@@ -23,7 +23,7 @@ let storage = multer.diskStorage({
             cb(null, dir); // null: for error checking type 
         },
         filename: function (req, file, cb) {
-            cb(null, new Timestamp() +'_'+ file.originalname); 
+            cb(null, Date.now() +'_'+ file.originalname); 
         }
     }), 
 
