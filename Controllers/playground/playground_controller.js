@@ -23,13 +23,13 @@ exports.getAllPlaygrounds = (req, res, next) => {
         .catch(err => {
             console.log(err);
             res.status(500).json({
-                error: err,
+                error: err.message,
             });
         });
 };
 
 exports.getOwnerPlaygrounds = (req, res, next) => {
-    Playground.find({ owner_Id: req.body.owner_Id }) //"owner_Id: req.params.owner_Id" changed to owner_Id: req.body.owner_Id
+    Playground.find({ owner_Id: req.params.owner_Id }) //"owner_Id: req.params.owner_Id" changed to owner_Id: req.body.owner_Id
         .exec()
         .then(playgrounds => {
             res.status(200).json(playgrounds);
@@ -37,15 +37,15 @@ exports.getOwnerPlaygrounds = (req, res, next) => {
         .catch(err => {
             console.log(err);
             res.status(500).json({
-                error: err,
+                error: err.message,
             });
         });
 };
 
 exports.getOwnerSpecificPlayground = (req, res, next) => {
     Playground.find({
-        owner_Id: req.body.owner_Id,
-        _id: req.body.playground_Id
+        // owner_Id: req.params.owner_Id,
+        _id: req.params.playground_Id
     }) //"owner_Id: req.params.owner_Id" changed to owner_Id: req.body.owner_Id
         .exec()
         .then(playground => {
@@ -54,7 +54,7 @@ exports.getOwnerSpecificPlayground = (req, res, next) => {
         .catch(err => {
             console.log(err);
             res.status(500).json({
-                error: err,
+                error: err.message,
             });
         });
 };
@@ -62,161 +62,64 @@ exports.getOwnerSpecificPlayground = (req, res, next) => {
 exports.addOwnerPlayground = (req, res, next) => {
 
 
-        const ownerId = req.body.owner_Id,
-            playgroudID = new mongoose.Types.ObjectId();
+    const ownerId = req.params.owner_Id,
+        playgroudID = new mongoose.Types.ObjectId();
 
-        // creating the model object and adding simple format requests to fields 
-        const newPlayground = new Playground({
-            _id: playgroudID,
-            playground_name: req.body.playground_name,
-            owner_Id: ownerId,
-            description: req.body.description,
-            address: req.body.address,
-            capacity: req.body.capacity,
-            avaiable: req.body.avaiable
+    // creating the model object and adding simple format requests to fields 
+    const newPlayground = new Playground({
+        _id: playgroudID,
+        playground_name: req.body.playground_name,
+        owner_Id: ownerId,
+        description: req.body.description,
+        address: req.body.address,
+        capacity: req.body.capacity,
+        avaiable: req.body.avaiable
+    });
+    //insert the weekdays to the weekdays Array field of working day schema model
+    extractWeekDays(req, newPlayground);
+    extractImages(req, newPlayground);
+
+    // finished and saving it to db's playground collection
+    newPlayground
+        .save()
+        .then(() => {
+            res.status(201).json({
+                message: 'newPlayground created successfully !',
+            });
+
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err.message,
+            });
         });
-        //insert the weekdays to the weekdays Array field of working day schema model
-        extractWeekDays(req, newPlayground);
-
-        // finished and saving it to db's playground collection
-        newPlayground
-            .save()
-            .then(() => {
-                res.status(201).json({
-                    message: 'newPlayground created successfully !',
-                });
-
+    // Add the new playground to db's owners collection
+    if (ownerId.match(/^[0-9a-fA-F]{24}$/)) {
+        Owner.findById(ownerId)
+            .then(owner => {
+                console.log(owner)
+                owner.playgrounds = newPlayground._id
+                owner.save()
             })
             .catch(err => {
                 console.log(err);
                 res.status(500).json({
-                    error: err,
+                    error: err.message,
                 });
             });
-        // Add the new playground to db's owners collection
-        if (ownerId.match(/^[0-9a-fA-F]{24}$/)) {
-            Owner.findById(ownerId)
-                .then(owner => {
-                    console.log(owner)
-                    owner.playgrounds = newPlayground._id
-                    owner.save()
-                })
-                .catch(err => {
-                    console.log(err);
-                    res.status(500).json({
-                        error: err,
-                    });
-                });
-        } else {
-            console.log("owner Id format is incorrect!");
-            res.status(400).json({
-                message: "owner Id format is incorrect!"
-            });
-        }
+    } else {
+        console.log("owner Id format is incorrect!");
+        res.status(400).json({
+            message: "owner Id format is incorrect!"
+        });
+    }
 
 };
-
-exports.editDescription = (req, res, next) => {
-    Playground.findOneAndUpdate({
-        _id: req.body.playground_Id,
-        owner_Id: req.body.owner_Id
-    }, { $set: { description: req.body.description }, useFindAndModify: true })
-        .exec()
-        .then(() => {
-            res.status(200).json({
-                editAcceptance: true
-            })
-        })
-        .catch(err => {
-            res.status(500).json({
-                editAcceptance: false,
-                error: err
-            })
-        });
-
-};
-
-exports.editAvailability = (req, res, next) => {
-    Playground.findOneAndUpdate({
-        _id: req.body.playground_Id,
-        owner_Id: req.body.owner_Id
-    }, { $set: { avaiable: req.body.avaiable } })
-        .exec()
-        .then(() => {
-            res.status(200).json({
-                editAcceptance: true
-            })
-        })
-        .catch(err => {
-            res.status(500).json({
-                editAcceptance: false,
-                error: err
-            });
-        });
-
-};
-
-exports.editAddress = (req, res, next) => {
-    Playground.findOneAndUpdate({
-        _id: req.body.playground_Id,
-        owner_Id: req.body.owner_Id
-    }, { $set: { address: req.body.address } })
-        .exec()
-        .then(() => {
-            res.status(200).json({
-                editAcceptance: true
-            })
-        })
-        .catch(err => {
-            res.status(500).json({
-                editAcceptance: false,
-                error: err
-            });
-        });
-};
-
-exports.editWeekDays = (req, res, next) => {
-    let updateToDB = false;
-    Playground.findOne({
-        _id: req.body.playground_Id,
-        owner_Id: req.body.owner_Id
-    })
-        .exec()
-        .then(playground => { // by dayname
-            // First: check if a day to be deleted in a document
-            let Days = deleteDay(req, res, playground);
-            //Second: check if to add a new day document
-            let addDays = addDay(req, res, playground);
-            addDays.forEach(newday => {
-                Days.push(newday);
-            })
-            //Third check if any changes need to be done
-
-            Playground.findOneAndUpdate({
-                _id: req.body.playground_Id,
-                owner_Id: req.body.owner_Id
-            }, {$set:{weekDays:Days}})
-            .exec()
-            .then(() => {
-                res.status(200).json({
-                    editAcceptance: true
-                });    
-            })
-
-
-        })
-        .catch(err => {
-            res.status(500).json({
-                editAcceptance: false,
-                error: err
-            });
-        });
-}
 
 exports.addAnotherImage = (req, res, next) => {
     Playground.findOne({
-        owner_Id: req.body.owner_Id,
-        _id: req.body.playground_Id
+        _id: req.params.playground_Id
     })
         .exec()
         .then((playgroundOutput) => {
@@ -234,44 +137,154 @@ exports.addAnotherImage = (req, res, next) => {
                 }).catch(err => {
                     res.status(500).json({
                         editAcceptance: false,
-                        error: err
+                        error: err.message
                     });
                 });
         })
         .catch(err => {
             res.status(500).json({
                 editAcceptance: false,
-                error: err
+                error: err.message
             });
         });
 };
 
+exports.addWorkingDay = (req, res, next) => {
+    let newDays = [];
+    Playground.findOne({
+        _id: req.params.playground_Id
+    })
+        .exec()
+        .then(playground => { // by dayName
+            let addDays = addDay(req, res, playground);
+            addDays.forEach(newday => {
+                newDays.push(newday);
+            })
+            Playground.findOneAndUpdate({
+                _id: req.params.playground_Id
+            }, { $addToSet: { weekDays: newDays } })
+                .exec()
+                .then(() => {
+                    res.status(200).json({
+                        editAcceptance: true
+                    });
+                })
+        })
+        .catch(err => {
+            res.status(500).json({
+                editAcceptance: false,
+                error: err.message
+            });
+        });
+}
+
+exports.editDescription = (req, res, next) => {
+    Playground.findOneAndUpdate({
+        _id: req.params.playground_Id
+    }, { $set: { description: req.body.description }, useFindAndModify: true })
+        .exec()
+        .then(() => {
+            res.status(200).json({
+                editAcceptance: true
+            })
+        })
+        .catch(err => {
+            res.status(500).json({
+                editAcceptance: false,
+                error: err.message
+            })
+        });
+
+};
+
+exports.editAvailability = (req, res, next) => {
+    Playground.findOneAndUpdate({
+        _id: req.params.playground_Id
+    }, { $set: { avaiable: req.body.avaiable } })
+        .exec()
+        .then(() => {
+            res.status(200).json({
+                editAcceptance: true
+            })
+        })
+        .catch(err => {
+            res.status(500).json({
+                editAcceptance: false,
+                error: err.message
+            });
+        });
+
+};
+
+exports.editAddress = (req, res, next) => {
+    Playground.findOneAndUpdate({
+        _id: req.params.playground_Id
+    }, { $set: { address: req.body.address } })
+        .exec()
+        .then(() => {
+            res.status(200).json({
+                editAcceptance: true
+            })
+        })
+        .catch(err => {
+            res.status(500).json({
+                editAcceptance: false,
+                error: err.message
+            });
+        });
+};
+
+exports.editWeekDays = (req, res, next) => {
+
+    Playground.findOne({
+        _id: req.params.playground_Id
+    })
+        .exec()
+        .then(playground => {
+            
+            let replaceWorkingDays = editWorkingDay(req, res, playground);
+            
+            Playground.findOneAndUpdate({
+                _id: req.params.playground_Id
+            }, { $set: { weekDays: replaceWorkingDays } })
+                .exec()
+                .then(() => {
+                    res.status(200).json({
+                        editAcceptance: true
+                    });
+                })
+        })
+        .catch(err => {
+            res.status(500).json({
+                editAcceptance: false,
+                error: err.message
+            });
+        });
+}
+
 exports.deletePlaygroundImages = (req, res, next) => {
     Playground.findOne({
-        _id: req.body.playground_Id,
-        owner_Id: req.body.owner_Id
+        _id: req.params.playground_Id
     })
         .exec()
         .then(playgroundOutput => {
-            let imageToDelete = JSON.parse(req.body.imageToDelete);
-
+            let imageToDelete = JSON.parse(req.body.imageToDelete); // by image/file name
 
             // Delete the image(s) from the folder
             deleteSpecificImageFromFolder(req, res, imageToDelete, playgroundOutput);
 
             // Delete the image(s) from the document in db
-            let PlaygroundsSeperated = playgroundOutput.image.split(/[\\ ,]/),
+            let PlaygroundsSeperated = playgroundOutput.image.split(/[\\ ,]/), ///1234567890_playgroun1-1.jpg
                 newFieldValue = '';
-            console.log(PlaygroundsSeperated);
-            imageToDelete.forEach((image) => {
-                for (let index = 1; index < PlaygroundsSeperated.length; index++) {
-                    if (PlaygroundsSeperated[index] === image) {
-                        delete PlaygroundsSeperated[index];
-                        delete PlaygroundsSeperated[index - 1];
-                        break; //until the timestamp is changed
-                    }
+
+
+            for (let index = 1; index < PlaygroundsSeperated.length; index++) {
+                if (PlaygroundsSeperated[index] === imageToDelete) {
+                    delete PlaygroundsSeperated[index];
+                    delete PlaygroundsSeperated[index - 1];
+                    break;
                 }
-            });
+            }
 
             // convert it to string again
 
@@ -301,11 +314,11 @@ exports.deletePlaygroundImages = (req, res, next) => {
                 .catch(err => {
                     res.status(500).json({
                         deleteAcceptance: false,
-                        errorMessage: err
+                        errorMessage: err.message
                     })
                 })
         })
-}
+};
 
 exports.deleteOwnerPlayground = (req, res, next) => {
 
@@ -330,7 +343,40 @@ exports.deleteOwnerPlayground = (req, res, next) => {
 
             console.log(err);
             res.status(500).json({
-                error: err,
+                error: err.message,
+            });
+        });
+};
+
+exports.deleteWorkingDay = (req, res, next) => {
+    let reqWorkDay = req.body.workDay_Id,   // check body or params?
+        newWorkDays = [];
+
+    Playground.findOne({
+        _id: req.params.playground_Id
+    })
+        .exec()
+        .then((playgroundOutput) => {
+            playgroundOutput.weekDays.forEach(workDay => {
+                if (workDay._id != reqWorkDay) {
+                    newWorkDays.push(workDay);
+                }
+            });
+
+            Playground.findOneAndUpdate({
+                _id: req.params.playground_Id
+            }, { $set: { weekDays: newWorkDays } })
+                .exec()
+                .then(() => {
+                    res.status(200).json({
+                        deleteDayAcceptance: true
+                    })
+                })
+
+        }).catch(err => {
+            res.status(500).json({
+                deleteDayAcceptance: false,
+                error: err.message
             });
         });
 };
@@ -359,6 +405,7 @@ function extractWeekDays(req, newPlayground) {
         // console.log(startTime);
         // console.log(endTime);
         let aDay = {
+            _id: new mongoose.Types.ObjectId(),
             dayName: element.dayName,
             start_time: new Date(startTime),
             end_time: new Date(endTime),
@@ -369,7 +416,7 @@ function extractWeekDays(req, newPlayground) {
         // console.log(aDay.end_time.getHours());
         newPlayground.weekDays.push(aDay);
     });
-    extractImages(req, newPlayground);
+
 
 }
 
@@ -385,54 +432,47 @@ function addImage(req, res, playground) {
 
 function addDay(req, res, playground) {
     let newDay = [],
-        isNewDay = true, // is a new day
-        reqDays = JSON.parse(req.body.weekDays);
+        reqDay = JSON.parse(req.body.weekDays);
 
-    reqDays.forEach(days => {
-
-        for (let index = 0; index < playground.weekDays.length; index++) {
-            if (days.dayName === playground.weekDays[index].dayName) {
-                isNewDay = false;
-                break;
-            }
+    let startTime = moment(reqDay.start_time, 'hh:mm'),
+        endTime = moment(reqDay.end_time, 'hh:mm'),
+        aDay = {
+            _id: new mongoose.Types.ObjectId(),
+            dayName: reqDay.dayName,
+            start_time: new Date(startTime),
+            end_time: new Date(endTime),
+            hourPriceAM: parseFloat(reqDay.hourPriceAM),
+            hourPricePM: parseFloat(reqDay.hourPricePM)
         }
-
-        if (isNewDay) {
-            let startTime = moment(days.start_time, 'hh:mm'),
-                endTime = moment(days.end_time, 'hh:mm'),
-                aDay = {
-                    dayName: days.dayName,
-                    start_time: new Date(startTime),
-                    end_time: new Date(endTime),
-                    hourPriceAM: parseFloat(days.hourPriceAM),
-                    hourPricePM: parseFloat(days.hourPricePM)
-                }
-            newDay.push(aDay);
-        } else {
-            isNewDay = true;
-        }
-    })
+    newDay.push(aDay);
 
     // add All saved new days to DB
-
     return newDay;
 }
 
-function deleteDay(req, res, playground) {
-    let Days = [],
-        reqDays = JSON.parse(req.body.weekDays);
+function editWorkingDay(req, res, playground) {
+    let updateDayWith = JSON.parse(req.body.weekDays),
+        updatedWeekDays = [];
+    
+    for (let index = 0; index < playground.weekDays.length; index++) {
+        if (updateDayWith._id == playground.weekDays[index]._id) {
+            let startTime = moment(updateDayWith.start_time, 'hh:mm'),
+                endTime = moment(updateDayWith.end_time, 'hh:mm');
+            let updatedDay = {
+                _id: updateDayWith._id,
+                dayName: updateDayWith.dayName,
+                start_time: new Date(startTime),
+                end_time: new Date(endTime),
+                hourPriceAM: parseFloat(updateDayWith.hourPriceAM),
+                hourPricePM: parseFloat(updateDayWith.hourPricePM)
 
-    playground.weekDays.forEach(days => {
-        for (let index = 0; index < reqDays.length; index++) {
-            if (days.dayName === reqDays[index].dayName) {
-                Days.push(days);
-                break;
             }
+            updatedWeekDays.push(updatedDay);
+        } else {
+            updatedWeekDays.push(playground.weekDays[index]);
         }
-    })
-
-    // add All saved new days to DB
-    return Days;
+    }
+    return updatedWeekDays;
 }
 
 function deleteImageFromFolder(req, res, playground) {
@@ -469,26 +509,20 @@ function deleteImageFromFolder(req, res, playground) {
     }
 }
 
-function deleteSpecificImageFromFolder(req, res, deleteImages, playground) {
+function deleteSpecificImageFromFolder(req, res, deleteImage, playground) {
 
     if (playground !== null) {
         try {
             fs.readdir(imagesdir, function (err, files) { //reads the folder files
                 files.forEach(function (file, index) { // iterate over these files
-                    for (let index = 0; index < deleteImages.length; index++) {
-                        // console.log('file: ' + typeof(file))
-                        // console.log('deleteImages: ' + typeof(deleteImages[index]));
-                        // console.log(file === deleteImages[index]);
-                        if (file === deleteImages[index]) {
-                            fs.unlink(path.join(imagesdir, file), (err) => {
-                                if (err) {
-                                    console.log(err);
-                                } else {
-                                    console.log(file + " is successfully deleted.")
-                                }
-                            }) // delete the file from the folder
-                        }
-
+                    if (file === deleteImage) {
+                        fs.unlink(path.join(imagesdir, file), (err) => {
+                            if (err) {
+                                console.log(err);
+                            } else {
+                                console.log(file + " is successfully deleted.")
+                            }
+                        }) // delete the file from the folder
                     }
                 })
             });
