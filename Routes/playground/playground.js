@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const upload = require('../../Controllers/uploadingImages');
 const playgroundController = require('../../Controllers/playground/playground_controller');
-const checkAuth = require('../../check_auth/check_auth');
+const checkAuth = require('../../middleware/check_auth');
 
 router.post("/addPlayground/:owner_Id", checkAuth, upload.array('images[]'), playgroundController.addOwnerPlayground);
 router.post("/addWorkingDay/:playground_Id", checkAuth, playgroundController.addWorkingDay);
@@ -10,6 +10,7 @@ router.post("/addWorkingDay/:playground_Id", checkAuth, playgroundController.add
 router.get("/getOwnerSpecificPlayground/:playground_Id", checkAuth, playgroundController.getOwnerSpecificPlayground);
 router.get("/getOwnerPlaygrounds/:owner_Id", checkAuth, playgroundController.getOwnerPlaygrounds);
 router.get("/getAllPlaygrounds", playgroundController.getAllPlaygrounds);
+router.get("/getNearPlaygrounds", checkAuth,playgroundController.getNearPlaygrounds);
 
 router.delete("/deleteOwnerPlaygrounds", checkAuth, playgroundController.deleteOwnerPlayground);
 router.delete("/deletePlaygroundImages/:playground_Id", checkAuth, playgroundController.deletePlaygroundImages);

@@ -22,6 +22,9 @@ const users = new Schema({
     },
     type_of_user:{
         type:Number,//1 => player ,  2 => owner
+    },
+    image :{
+        type :String
     }
 
 }, {
