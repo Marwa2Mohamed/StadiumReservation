@@ -11,10 +11,11 @@ const {check, validationResult} = require('express-validator');
 // const authToken = 'ab2dac19b859780bf3dd2ab7b662fae4';
 // const client = require('twilio')(accountSid, authToken);
 
+// signUp controller
 exports.signUp = (req, res, next) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()){
-       return res.status(422).jsonp(errors.array());
+       return res.status(422).json(errors.array());
     } // any non-validated error from the routes check methods for phone and password
      
     else {
@@ -90,7 +91,7 @@ exports.signUp = (req, res, next) => {
     }
 };
 
-
+// signIn controller
 exports.login = (req, res, next) => {
     User.findOne({
         phone_number: req.body.phone_number

@@ -41,7 +41,7 @@ router.post("/signUp",[ // for express validation
     .notEmpty()
     .withMessage('password is required')
     .isStrongPassword()
-    .withMessage('This password is weak')
+    .withMessage('This password Must contains capital letters, small letters and symbol ')
 ], authController.signUp);
 
 module.exports = router;

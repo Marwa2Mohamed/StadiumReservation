@@ -7,7 +7,6 @@ const workingDays = new Schema(
             type: String,
             required: true
         },
-
         start_time: {
             type: Date, // just the HH:mm part
             required: true
@@ -24,7 +23,6 @@ const workingDays = new Schema(
             type: Number,
             default: 0
         }
-
     });
 const playgrounds = new Schema({
     _id: mongoose.Schema.Types.ObjectId,
@@ -68,12 +66,10 @@ const playgrounds = new Schema({
         type: String,
         required: true
     },
-
     image: {
         type: String,
         required: true 
     },
-
     avaiable: {
         type: Boolean,
         required: true
