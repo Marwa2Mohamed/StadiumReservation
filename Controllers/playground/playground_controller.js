@@ -73,12 +73,13 @@ exports.addOwnerPlayground = (req, res, next) => {
         description: req.body.description,
         address: req.body.address,
         capacity: req.body.capacity,
-        location: {
-            type: 'Point',
-            coordinates: req.body.coordinates
-        },
+        // location: {
+        //     type: 'Point',
+        //     coordinates: req.body.coordinates
+        // },
         avaiable: req.body.avaiable
     });
+    debugger
     //insert the weekdays to the weekdays Array field of working day schema model
     extractWeekDays(req, newPlayground);
     extractImages(req, newPlayground);
@@ -94,9 +95,11 @@ exports.addOwnerPlayground = (req, res, next) => {
         })
         .catch(err => {
             console.log(err);
+            debugger
             res.status(500).json({
                 error: err.message,
             });
+
         });
     // Add the new playground to db's owners collection
     if (ownerId.match(/^[0-9a-fA-F]{24}$/)) {
@@ -108,6 +111,7 @@ exports.addOwnerPlayground = (req, res, next) => {
             })
             .catch(err => {
                 console.log(err);
+                debugger
                 res.status(500).json({
                     error: err.message,
                 });
