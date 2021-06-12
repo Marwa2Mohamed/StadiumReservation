@@ -13,7 +13,8 @@ const authRoutes = require('./Routes/auth/auth')
 const userRoutes = require('./Routes/user/user')
 const playerRoutes = require('./Routes/user/player')
 const ownerRoutes = require('./Routes/user/owner')
-const playgrundRoutes = require('./Routes/playground/playground')
+const playgrundRoutes = require('./Routes/playground/playground');
+const playgrundPlayerRoutes = require('./Routes/playground/playground_player');
 
 
 // user modules
@@ -38,7 +39,8 @@ app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/player', playerRoutes);
 app.use('/owner', ownerRoutes);
-app.use('/playground', playgrundRoutes);
+app.use('/playgroundOwner', playgrundRoutes);
+app.use('/playgroundPlayer', playgrundPlayerRoutes);
 
 
 
@@ -67,7 +69,7 @@ mongoose.connect('mongodb+srv://marwa:S6kGUWjCjWmbhKRJ@cluster0.twzmg.mongodb.ne
     .then(() => {
         app.listen(PORT, () => {
             console.log(`Server started on port`);
-        });]
+        });
     }).catch(err => {
         console.log(err)
     })

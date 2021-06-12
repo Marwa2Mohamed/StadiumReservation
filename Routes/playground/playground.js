@@ -10,7 +10,7 @@ router.post("/addWorkingDay/:playground_Id", checkAuth, playgroundController.add
 router.get("/getOwnerSpecificPlayground/:playground_Id", checkAuth, playgroundController.getOwnerSpecificPlayground);
 router.get("/getOwnerPlaygrounds/:owner_Id", checkAuth, playgroundController.getOwnerPlaygrounds);
 router.get("/getAllPlaygrounds", playgroundController.getAllPlaygrounds);
-router.get("/getNearPlaygrounds", checkAuth,playgroundController.getNearPlaygrounds);
+
 
 router.delete("/deleteOwnerPlaygrounds", checkAuth, playgroundController.deleteOwnerPlayground);
 router.delete("/deletePlaygroundImages/:playground_Id", checkAuth, playgroundController.deletePlaygroundImages);
