@@ -1,0 +1,792 @@
+{
+	"info": {
+		"_postman_id": "10099856-3db0-4e1c-8daa-f17df5ff2e4b",
+		"name": "reservation-stadium",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "phone_number",
+									"value": "01023456576",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Mahmoud_243",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/auth/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							],
+							"query": [
+								{
+									"key": "phone_number",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\" :\"Mohamoud\",\r\n    \"second_name\":\" Mohamed\",\r\n    \"phone_number\" : \"01023456576\",\r\n    \"password\":\"Mahmoud_243\",\r\n    \"type\" : \"owner\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/signUp",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"signUp"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "playgrounds",
+			"item": [
+				{
+					"name": "addPlayground",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZV9udW1iZXIiOiIwMTAyMzQ1NjU3NiIsInVzZXJJZCI6IjYwYzUxNDFiMDc0OTg1MDAwNDY2NWUzZCIsImlhdCI6MTYyMzUyODUxMX0.0UyU1qpPBTO1VBfTM7CS-BllUVc216RIIcgXfuV-toA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZV9udW1iZXIiOiIwMTAyMzQ1NjU4NiIsInVzZXJJZCI6IjYwNDk5MTdjNGYyYTE5NjAyYzY4MjBmZCIsImlhdCI6MTYxNTQzNDEzNn0.QuRrdS1GPgopNA2fma5_ZjJQ4kY5zgCc5HrUvJ_39yU",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "playground_name",
+									"value": "\"playground2\"",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "\"playgroundtwo\"",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "\"anywhere\"",
+									"type": "text"
+								},
+								{
+									"key": "capacity",
+									"value": "\"7\"",
+									"type": "text"
+								},
+								{
+									"key": "avaiable",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "weekDays",
+									"value": "[\n  {\n\t\"dayName\":\"Monday\", \n\t\"start_time\":\"10:30\", \n\t\"end_time\":\"21:30\", \n\t\"hourPriceAM\":10.50, \n\t\"hourPricePM\":20\n   }, \n   {\n\t\"dayName\":\"Tuesday\",\n\t\"start_time\":\"09:00\",\n\t \"end_time\":\"21:30\",\n\t\"hourPriceAM\":10.50,\n\t\"hourPricePM\":20\n    },\n   {\n\t\"dayName\":\"Wednesday\",\n\t\"start_time\":\"09:00\",\n\t \"end_time\":\"21:30\",\n\t\"hourPriceAM\":10.50,\n\t\"hourPricePM\":20\n   },\n   {\n\t\"dayName\":\"Thursday\",\n\t\"start_time\":\"13:00\",\n\t \"end_time\":\"03:00\",\n\t\"hourPriceAM\":10.50,\n\t\"hourPricePM\":20\n    },\n   {\n\t\"dayName\":\"Friday\",\n\t\"start_time\":\"13:00\",\n\t \"end_time\":\"3:00\",\n\t\"hourPriceAM\":10.50,\n\t\"hourPricePM\":20\n    },\n   {\n\t \"dayName\":\"Sunday\",\n\t\"start_time\":\"15:00\",\n\t \"end_time\":\"00:00\",\n\t\"hourPriceAM\":10.50,\n\t\"hourPricePM\":20\n    }\n]\n",
+									"type": "text"
+								},
+								{
+									"key": "images[]",
+									"type": "file",
+									"src": [
+										"/D:/StadiumReservation/playground1-1.jpg",
+										"/D:/StadiumReservation/playground1-2.jpg",
+										"/D:/StadiumReservation/playground1-3.jpg"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/playground/addPlayground/604e687a3392a253483c0506",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"playground",
+								"addPlayground",
+								"604e687a3392a253483c0506"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addWorkingDay",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZV9udW1iZXIiOiIwMTAyMzQ1NjU4NiIsInVzZXJJZCI6IjYwNDk5MTdjNGYyYTE5NjAyYzY4MjBmZCIsImlhdCI6MTYxNTQzNDEzNn0.QuRrdS1GPgopNA2fma5_ZjJQ4kY5zgCc5HrUvJ_39yU",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "weekDays",
+									"value": "{\n\t\"dayName\":\"Sunday\", \n\t\"start_time\":\"10:30\", \n\t\"end_time\":\"21:30\", \n\t\"hourPriceAM\":10.50, \n\t\"hourPricePM\":20\n }",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/playground/addWorkingDay/605d675486a2d73b5c2dba7f",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"playground",
+								"addWorkingDay",
+								"605d675486a2d73b5c2dba7f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllPlaygrounds",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/playground/getAllPlaygrounds",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"playground",
+								"getAllPlaygrounds"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getOwnerPlaygrounds",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZV9udW1iZXIiOiIwMTEwMDIiLCJ1c2VySWQiOiI2MDEwZDUwNzU5YmZmZjAyZGMzMmU4NWIiLCJpYXQiOjE2MTE3MTU5MTl9.WWvjQ0P73sfJPVFk-XK0UASqjBteIP749bKW59p198s",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "owner_Id",
+									"value": "604e687a3392a253483c0506",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/playground/getOwnerPlaygrounds/604e687a3392a253483c0506",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"playground",
+								"getOwnerPlaygrounds",
+								"604e687a3392a253483c0506"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getOwnerSpecificPlayground",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZV9udW1iZXIiOiIwMTAyMzQ1NjU4NiIsInVzZXJJZCI6IjYwNGU2ODdhMzM5MmEyNTM0ODNjMDUwNiIsImlhdCI6MTYxNTc1MTI5NX0.XrBy2mKZUWh53-nLAyliQmXsTyAozxcKrMjHlkfiUXc",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "owner_Id",
+									"value": "604e687a3392a253483c0506",
+									"type": "text"
+								},
+								{
+									"key": "playground_Id",
+									"value": "60504fb5f427a54e6c7a57da",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/playground/getOwnerSpecificPlayground/60504fb5f427a54e6c7a57da",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"playground",
+								"getOwnerSpecificPlayground",
+								"60504fb5f427a54e6c7a57da"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getNearPlayground",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": null
+					},
+					"response": []
+				},
+				{
+					"name": "deleteOwnerPlaygrounds",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZV9udW1iZXIiOiIwMTAyMzQ1NjU4NiIsInVzZXJJZCI6IjYwNDk5MTdjNGYyYTE5NjAyYzY4MjBmZCIsImlhdCI6MTYxNTQzNDEzNn0.QuRrdS1GPgopNA2fma5_ZjJQ4kY5zgCc5HrUvJ_39yU",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "playground_Id",
+									"value": "605d4a182b94092f7ca32593",
+									"type": "text"
+								},
+								{
+									"key": "owner_Id",
+									"value": "604e687a3392a253483c0506",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/playground/deleteOwnerPlaygrounds",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"playground",
+								"deleteOwnerPlaygrounds"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletePlaygroundImages",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZV9udW1iZXIiOiIwMTEwMDIiLCJ1c2VySWQiOiI2MDEwZDUwNzU5YmZmZjAyZGMzMmU4NWIiLCJpYXQiOjE2MTE3MTU5MTl9.WWvjQ0P73sfJPVFk-XK0UASqjBteIP749bKW59p198s",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "owner_Id",
+									"value": "604e687a3392a253483c0506",
+									"type": "text"
+								},
+								{
+									"key": "playground_Id",
+									"value": "60597ed917ffcc54288c43a4",
+									"type": "text"
+								},
+								{
+									"key": "imageToDelete",
+									"value": "\"1616477913300_playround2-1.jpeg\"",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/playground/deletePlaygroundImages",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"playground",
+								"deletePlaygroundImages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteWeekDays",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZV9udW1iZXIiOiIwMTAyMzQ1NjU4NiIsInVzZXJJZCI6IjYwNGU2ODdhMzM5MmEyNTM0ODNjMDUwNiIsImlhdCI6MTYxNTc1MTI5NX0.XrBy2mKZUWh53-nLAyliQmXsTyAozxcKrMjHlkfiUXc",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "workDay_Id",
+									"value": "605d68419967ab33c427fc06",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/playground/deleteWorkingDay/605d675486a2d73b5c2dba7f",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"playground",
+								"deleteWorkingDay",
+								"605d675486a2d73b5c2dba7f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editDescription",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZV9udW1iZXIiOiIwMTAyMzQ1NjU4NiIsInVzZXJJZCI6IjYwNDk5MTdjNGYyYTE5NjAyYzY4MjBmZCIsImlhdCI6MTYxNTQzNDEzNn0.QuRrdS1GPgopNA2fma5_ZjJQ4kY5zgCc5HrUvJ_39yU",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "owner_Id",
+									"value": "604ad72b7d7dec5aa469a8d7",
+									"type": "text"
+								},
+								{
+									"key": "playground_Id",
+									"value": "604d5d58708847326cbc7391",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "\"playground One Edit\"",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/playground/editDescription",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"playground",
+								"editDescription"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editAvailability",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZV9udW1iZXIiOiIwMTAyMzQ1NjU4NiIsInVzZXJJZCI6IjYwNDk5MTdjNGYyYTE5NjAyYzY4MjBmZCIsImlhdCI6MTYxNTQzNDEzNn0.QuRrdS1GPgopNA2fma5_ZjJQ4kY5zgCc5HrUvJ_39yU",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "owner_Id",
+									"value": "604ad72b7d7dec5aa469a8d7",
+									"type": "text"
+								},
+								{
+									"key": "playground_Id",
+									"value": "604d5d58708847326cbc7391",
+									"type": "text"
+								},
+								{
+									"key": "avaiable",
+									"value": "false",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/playground/editAvailability",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"playground",
+								"editAvailability"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addAnotherImage",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZV9udW1iZXIiOiIwMTAyMzQ1NjU4NiIsInVzZXJJZCI6IjYwNDk5MTdjNGYyYTE5NjAyYzY4MjBmZCIsImlhdCI6MTYxNTQzNDEzNn0.QuRrdS1GPgopNA2fma5_ZjJQ4kY5zgCc5HrUvJ_39yU",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "owner_Id",
+									"value": "604e687a3392a253483c0506",
+									"type": "text"
+								},
+								{
+									"key": "playground_Id",
+									"value": "604ed475347faf5dfc98876a",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/D:/StadiumReservation/playground1-4.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/playground/addAnotherImage",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"playground",
+								"addAnotherImage"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editAddress",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZV9udW1iZXIiOiIwMTAyMzQ1NjU4NiIsInVzZXJJZCI6IjYwNDk5MTdjNGYyYTE5NjAyYzY4MjBmZCIsImlhdCI6MTYxNTQzNDEzNn0.QuRrdS1GPgopNA2fma5_ZjJQ4kY5zgCc5HrUvJ_39yU",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "owner_Id",
+									"value": "604ad72b7d7dec5aa469a8d7",
+									"type": "text"
+								},
+								{
+									"key": "playground_Id",
+									"value": "604da62914219a4964feddf4",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "6234 Avenue",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/playground/editAddress",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"playground",
+								"editAddress"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editWeekDays",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZV9udW1iZXIiOiIwMTAyMzQ1NjU4NiIsInVzZXJJZCI6IjYwNDk5MTdjNGYyYTE5NjAyYzY4MjBmZCIsImlhdCI6MTYxNTQzNDEzNn0.QuRrdS1GPgopNA2fma5_ZjJQ4kY5zgCc5HrUvJ_39yU",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "weekDays",
+									"value": "{\n   \"hourPriceAM\": 5,\n   \"hourPricePM\": 10,\n   \"_id\": \"605d74ad792bc238c0a03540\",\n   \"dayName\": \"Sunday\",\n   \"start_time\": \"2021-03-25T15:30:00.000Z\",\n   \"end_time\": \"2021-03-26T02:30:00.000Z\"\n}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/playground/editWeekDays/605d675486a2d73b5c2dba7f",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"playground",
+								"editWeekDays",
+								"605d675486a2d73b5c2dba7f"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "owners",
+					"item": [
+						{
+							"name": "getOwners",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/owner/getOwners",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"owner",
+										"getOwners"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "players",
+					"item": [
+						{
+							"name": "getPlayers",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/player/getPlayers",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"player",
+										"getPlayers"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "getSpecificUser",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{url}}/user/604e687a3392a253483c0506",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"604e687a3392a253483c0506"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllUsers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/user/getAllUser",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"getAllUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteUser",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/user/604ad72b7d7dec5aa469a8d7",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"604ad72b7d7dec5aa469a8d7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "https://stadium-reservation.herokuapp.com"
+		},
+		{
+			"key": "url",
+			"value": "http://localhost:3000",
+			"disabled": true
+		}
+	]
+}

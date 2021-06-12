@@ -16,11 +16,11 @@ const workingDays = new Schema(
             type: Date, // just the HH:mm part
             required: true
         },
-        hourPriceAM: {
+        hourPriceAM: { // playground
             type: Number,
             default: 0
         },
-        hourPricePM: {
+        hourPricePM: { //playground
             type: Number,
             default: 0
         }
@@ -32,7 +32,7 @@ const playgrounds = new Schema({
         type: String,
         required: [true ,'Please add a playground_name']
     },
-    owner_Id: {
+    owner_Id: { // stadium id
         type: Schema.Types.ObjectId,
         ref: 'Owner'
     },
@@ -40,11 +40,11 @@ const playgrounds = new Schema({
         type: String,
 
     },
-    weekDays: {
+    weekDays: { // stadium
         type: [workingDays],
         required: true
     },
-    location: {
+    location: { // stadium
       
         type: {
           type: String, 
@@ -60,7 +60,7 @@ const playgrounds = new Schema({
         type:Date,
         default:Date.now
     },
-    address: {
+    address: { // stadium
         type: String,
         required: true
     },
@@ -74,7 +74,7 @@ const playgrounds = new Schema({
         required: true 
     },
 
-    avaiable: {
+    avaiable: { // stadium & playground
         type: Boolean,
         required: true
     }
