@@ -20,14 +20,14 @@ router.post("/signUp",[ // for express validation
     .notEmpty()
     .withMessage('first_name is required')
     .matches('(^[a-zA-z\\s]{3,}$|^[\u0600-\u06FF\\s]{3,}$)')
-    .withMessage('first_ name should contains only pure Arabic or English letters and/or spaces'),
+    .withMessage('first_ name should contains only pure Arabic or English letters and/or spaces and at least 3 letters'),
 
     check('second_name')
     .trim()
     .notEmpty()
     .withMessage('second_name is required')
     .matches('(^[a-zA-z\\s]{3,}$|^[\u0600-\u06FF\\s]{3,}$)')
-    .withMessage('second_name should contains only pure Arabic or English letters and/or spaces'),
+    .withMessage('second_name should contains only pure Arabic or English letters and/or spaces and at least 3 letters'),
     
     check('phone_number')
     .notEmpty()
