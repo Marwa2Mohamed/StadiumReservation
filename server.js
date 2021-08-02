@@ -13,6 +13,7 @@ const authRoutes = require('./Routes/auth/auth')
 const userRoutes = require('./Routes/user/user')
 const playerRoutes = require('./Routes/user/player')
 const ownerRoutes = require('./Routes/user/owner')
+const staffRoutes = require('./Routes/user/stadiumstaff')
 const playgrundRoutes = require('./Routes/playground/playground');
 const playgrundPlayerRoutes = require('./Routes/playground/playground_player');
 
@@ -39,6 +40,7 @@ app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/player', playerRoutes);
 app.use('/owner', ownerRoutes);
+app.use('/stadiumstaff', staffRoutes);
 app.use('/playgroundOwner', playgrundRoutes);
 app.use('/playgroundPlayer', playgrundPlayerRoutes);
 
